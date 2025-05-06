@@ -170,7 +170,7 @@ ngspice_LDADD += $(XSPICEDLLIBS)
 
 ngspice_LDADD += \
 	frontend/parser/libparser.la \
-	frontend/numparam/libnumparam.la \
+	@NUMPARAMLIB@ \
 	frontend/trannoise/libtrannoise.la \
 	spicelib/parser/libinp.la
 
@@ -246,7 +246,7 @@ endif
 ngnutmeg_LDADD += \
 	frontend/plotting/libplotting.la \
 	frontend/parser/libparser.la \
-	frontend/numparam/libnumparam.la \
+	@NUMPARAMLIB@ \
 	frontend/trannoise/libtrannoise.la \
 	maths/cmaths/libcmaths.la \
 	maths/misc/libmathmisc.la \
@@ -466,7 +466,7 @@ libspice_la_LIBADD += $(XSPICEDLLIBS)
 
 libspice_la_LIBADD += \
 	frontend/parser/libparser.la \
-	frontend/numparam/libnumparam.la \
+	@NUMPARAMLIB@ \
 	frontend/trannoise/libtrannoise.la \
 	spicelib/parser/libinp.la
 
@@ -593,7 +593,7 @@ libngspice_la_LIBADD += $(XSPICEDLLIBS)
 
 libngspice_la_LIBADD += \
 	frontend/parser/libparser.la \
-	frontend/numparam/libnumparam.la \
+	@NUMPARAMLIB@ \
 	frontend/trannoise/libtrannoise.la \
 	spicelib/parser/libinp.la
 

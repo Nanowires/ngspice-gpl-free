@@ -24,7 +24,9 @@ Author: 1985 Wayne A. Christopher, U. C. Berkeley CAD Group
 #include "plotting/graf.h"
 #include "spiceif.h"
 #include "outitf.h"
+#ifdef NUMPARAMS
 #include "numparam/numpaif.h"
+#endif	/* NUMPARAMS */     		
 
 #include "ngspice/inpdefs.h"
 
@@ -201,10 +203,12 @@ com_remcirc(wordlist *wl)
         return;
     }
 
+#ifdef NUMPARAMS
     /* delete numparam data structure dicoS */
     nupa_del_dicoS();
     /* delete entry in dicoslist */
     nupa_rem_dicoslist(ft_curckt->ci_dicos);
+#endif /* NUMPARAMS */     
 
     dbfree(ft_curckt->ci_dbs);
     ft_curckt->ci_dbs = NULL;
@@ -281,6 +285,8 @@ com_remcirc(wordlist *wl)
         modtab = ft_curckt->ci_modtab;
         modtabhash = ft_curckt->ci_modtabhash;
         dbs = ft_curckt->ci_dbs;
+#ifdef NUMPARAMS
         nupa_set_dicoslist(ft_curckt->ci_dicos);
+#endif /* NUMPARAMS */     
     }
 }

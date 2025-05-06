@@ -297,6 +297,10 @@ AC_ARG_ENABLE([cmathtests],
 AC_ARG_ENABLE([help],
     [AS_HELP_STRING([--enable-help], [Force building nghelp (deprecated)])])
 
+# --enable-numparam: define NUMPARAMS in the code. This is for .param support
+AC_ARG_ENABLE([numparam],
+    [AS_HELP_STRING([--enable-numparam],[Enable numparam library support])])
+
 # readline and editline cannot both be enabled
 if test "x$with_editline" = xyes; then
     if test "x$with_readline" = xyes; then
@@ -1236,6 +1240,19 @@ AM_CONDITIONAL([PSS_WANTED], [test "x$enable_pss" = xyes])
 AM_CONDITIONAL([SENSE2_WANTED], [test "x$enable_sense2" = xyes])
 
 
+# numparam option
+if test "x$enable_numparam" = xyes ; then
+    AC_MSG_RESULT(Numparam library is enabled)
+    AC_DEFINE(NUMPARAMS,[1],[Spice .param support])
+    NUMPARAMDIR="numparam"
+    NUMPARAMLIB="frontend/numparam/libnumparam.la"
+else
+    NUMPARAMDIR=""
+    NUMPARAMLIB=""
+fi
+AC_SUBST(NUMPARAMDIR)
+AC_SUBST(NUMPARAMLIB)
+
 # NDEV option
 if test "x$enable_ndev" = xyes; then
     AC_MSG_RESULT([NDEV features enabled])
@@ -1417,7 +1434,6 @@ AC_CONFIG_FILES([Makefile
                  src/ciderlib/oned/Makefile
                  src/ciderlib/twod/Makefile
                  src/frontend/Makefile
-                 src/frontend/numparam/Makefile
                  src/frontend/help/Makefile
                  src/frontend/parser/Makefile
                  src/frontend/plotting/Makefile
@@ -1434,7 +1450,6 @@ AC_CONFIG_FILES([Makefile
                  src/maths/poly/Makefile
                  src/maths/sparse/Makefile
                  src/maths/dense/Makefile
-                 src/maths/KLU/Makefile
                  src/misc/Makefile
                  src/xspice/Makefile
                  src/xspice/cm/Makefile

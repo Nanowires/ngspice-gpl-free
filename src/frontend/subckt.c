@@ -74,7 +74,9 @@ Modified: 2000 AlansFixes
 #include "subckt.h"
 #include "variable.h"
 
+#ifdef NUMPARAMS
 #include "numparam/numpaif.h"
+#endif
 
 extern void line_free_x(struct card *deck, bool recurse);
 extern int get_number_terminals(char* c);
@@ -136,8 +138,10 @@ struct subs {
  * list of translated names (i.e. after subckt expansion)
  */
 
+#ifdef NUMPARAMS
 /* flag indicating use of the experimental numparams library */
 static bool use_numparams = FALSE;
+#endif /* NUMPARAMS */
 
 static char start[32], sbend[32], invoke[32], model[32];
 
@@ -225,6 +229,7 @@ inp_subcktexpand(struct card *deck) {
     if (!cp_getvar("modelline", CP_STRING, model, sizeof(model)))
         strcpy(model, ".model");
 
+#ifdef NUMPARAMS
 /*    use_numparams = cp_getvar("numparams", CP_BOOL, NULL, 0); */
 
     use_numparams = TRUE;
@@ -267,6 +272,7 @@ inp_subcktexpand(struct card *deck) {
 #endif
 
     }
+#endif /* NUMPARAMS */
 
     /* Get all the model names so we can deal with BJTs, etc.
      *  Stick all the model names into the doubly-linked wordlist modnames.
@@ -365,9 +371,11 @@ inp_subcktexpand(struct card *deck) {
 
     /* Count numbers of line in deck after expansion */
     if (deck) {
+#ifdef NUMPARAMS
         dynMaxckt = 0; /* number of lines in deck after expansion */
         for (c = deck; c; c = c->nextcard)
             dynMaxckt++;
+#endif /* NUMPARAMS */	
     }
 
     /* Now check to see if there are still subckt instances undefined... */
@@ -375,11 +383,14 @@ inp_subcktexpand(struct card *deck) {
         if (ciprefix(invoke, c->line)) {
             fprintf(cp_err, "Error: unknown subckt: %s\n", c->line);
             fprintf(cp_err, "    in line no. %d from file %s\n", c->linenum_orig, c->linesource);
+#ifdef NUMPARAMS
             if (use_numparams)
                 nupa_signal(NUPAEVALDONE);
+#endif /* NUMPARAMS */	  
             return NULL;
         }
 
+#ifdef NUMPARAMS
     if (use_numparams) {
         /* the NUMPARAM final line translation pass */
         nupa_signal(NUPASUBDONE);
@@ -405,6 +416,7 @@ inp_subcktexpand(struct card *deck) {
         nupa_copy_inst_dico();
         nupa_signal(NUPAEVALDONE);
     }
+#endif /* NUMPARAMS */	  
 
     return (deck);  /* return the spliced deck.  */
 }
@@ -536,13 +548,17 @@ doit(struct card *deck, wordlist *modnames) {
                 else
                     deck = c;
 
+#ifdef NUMPARAMS
                 if (use_numparams == FALSE) {
+#endif /* NUMPARAMS */
                     line_free_x(ends, FALSE); /* drop the .ends card */
                     prev_of_ends->nextcard = NULL;
+#ifdef NUMPARAMS
                 } else {
                     ends->line[0] = '*'; /* comment the .ends card */
                     ends->nextcard = NULL;
                 }
+#endif /* NUMPARAMS */
 
             } else {
 
@@ -762,16 +778,20 @@ doit(struct card *deck, wordlist *modnames) {
 
                     /* Now splice the decks together. */
 
+#ifdef NUMPARAMS
                     if (use_numparams == FALSE) {
+#endif /* NUMPARAMS */ 
                         line_free_x(c, FALSE); /* drop the invocation */
                         if (prev_of_c)
                             prev_of_c->nextcard = su_deck;
                         else
                             deck = su_deck;
+#ifdef NUMPARAMS
                     } else {
                         c->line[0] = '*'; /* comment the invocation */
                         c->nextcard = su_deck;
                     }
+#endif /* NUMPARAMS */ 
 
                     c = su_deck;
                     while (c->nextcard)

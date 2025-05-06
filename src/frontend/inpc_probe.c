@@ -6,7 +6,9 @@
 #include "ngspice/ngspice.h"
 #include "ngspice/cpextern.h"
 #include "ngspice/dstring.h"
+#ifdef NUMPARAMS
 #include "numparam/general.h"
+#endif /* NUMPARAMS */
 #include "ngspice/hash.h"
 #include "ngspice/inpdefs.h"
 #include "ngspice/wordlist.h"
@@ -303,6 +305,7 @@ void inp_probe(struct card* deck)
             else {
                 char* nodename;
                 DS_CREATE(dnewline, 200);
+#ifdef NUMPARAMS
                 sadd(&dnewline, instname);
                 cadd(&dnewline, ' ');
                 for (i = 1; i <= numnodes; i++) {
@@ -342,6 +345,7 @@ void inp_probe(struct card* deck)
                     tfree(nodename);
                 }
                 sadd(&dnewline, thisline);
+#endif /* NUMPARAMS */
                 tfree(prevcard->line);
                 prevcard->line = copy(ds_get_buf(&dnewline));
                 ds_free(&dnewline);
@@ -1337,6 +1341,7 @@ static int setallvsources(struct card *tmpcard, NGHASHPTR instances, char *instn
     if (power) {
         /* For example: Bq1Vref q1Vref 0 V = 1/3*( */
         char numbuf[3];
+#ifdef NUMPARAMS
         sadd(&BVrefline, "Bprobe_int_");
         sadd(&BVrefline, instname);
         sadd(&BVrefline, "Vref ");
@@ -1355,6 +1360,7 @@ static int setallvsources(struct card *tmpcard, NGHASHPTR instances, char *instn
         sadd(&Bpowersave, instname);
         cadd(&Bpowersave, ':');
         sadd(&Bpowersave, "power");
+#endif /* NUMPARAMS */
 
         /* special for VDMOS: exclude thermal nodes */
         if (*instname == 'm' && strstr(tmpcard->line, "thermal"))
@@ -1409,6 +1415,7 @@ static int setallvsources(struct card *tmpcard, NGHASHPTR instances, char *instn
         card = insert_new_line(card, vline, 0, card->linenum_orig, card->linesource);
 
         if (power) {
+#ifdef NUMPARAMS
             /* For example V(1)+V(2)+V(3)*/
             if (nodenum == 1)
                sadd(&BVrefline, "V(");
@@ -1433,6 +1440,7 @@ static int setallvsources(struct card *tmpcard, NGHASHPTR instances, char *instn
             cadd(&Bpowerline, '_');
             sadd(&Bpowerline, strnode1name);
             cadd(&Bpowerline, ')');
+#endif /* NUMPARAMS */
 
             allsaves = wl_cons(copy(ds_get_buf(&Bpowersave)), allsaves);
         }
@@ -1454,7 +1462,9 @@ static int setallvsources(struct card *tmpcard, NGHASHPTR instances, char *instn
     }
 
     if (power) {
+#ifdef NUMPARAMS
         cadd(&BVrefline, ')');
+#endif /* NUMPARAMS */
         card = tmpcard->nextcard;
         card = insert_new_line(card, copy(ds_get_buf(&BVrefline)), 0, card->linenum_orig, card->linesource);
         card = insert_new_line(card, copy(ds_get_buf(&Bpowerline)), 0, card->linenum_orig, card->linesource);

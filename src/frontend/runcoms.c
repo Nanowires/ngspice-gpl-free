@@ -16,7 +16,9 @@ Modified: 2000 AlansFixes
 #include "ngspice/dvec.h"
 #include "ngspice/hash.h"
 
+#ifdef NUMPARAMS
 #include "numparam/numpaif.h"
+#endif /* NUMPARAMS */
 
 #include "circuits.h"
 #include "completion.h"
@@ -115,8 +117,10 @@ com_scirc(wordlist *wl)
     modtabhash = ft_curckt->ci_modtabhash;
     /* get the database for save, iplot, stop */
     dbs = ft_curckt->ci_dbs;
+#ifdef NUMPARAMS
     /* set the numparam dicos structure for use with measure */
     nupa_set_dicoslist(ft_curckt->ci_dicos);
+#endif	/* NUMPARAMS */
 }
 
 

@@ -40,7 +40,9 @@ Author: 1985 Wayne A. Christopher
 #include "ngspice/enh.h"
 #endif
 
+#ifdef NUMPARAMS
 #include "numparam/numpaif.h"
+#endif /* NUMPARAMS */
 #include "ngspice/stringskip.h"
 #include "ngspice/randnumb.h"
 #include "ngspice/compatmode.h"
@@ -191,7 +193,9 @@ com_listing(wordlist *wl)
         }
 
         if (do_param_listing) {
+#ifdef NUMPARAMS
             nupa_list_params(cp_out);
+#endif /* NUMPARAMS */
         } else {
             if (type != LS_DECK && type != LS_RUNNABLE)
                 fprintf(cp_out, "\t%s\n\n", ft_curckt->ci_name);
@@ -1537,7 +1541,9 @@ inp_dodeck(
     ct->ci_inprogress = FALSE;
     ct->ci_runonce = FALSE;
     ct->ci_commands = end;
+#ifdef NUMPARAMS
     ct->ci_dicos = nupa_add_dicoslist();
+#endif /* NUMPARAMS */
     /* prevent false reads in multi-threaded ngshared */
 #ifndef SHARED_MODULE    
     if (reuse)

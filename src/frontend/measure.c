@@ -13,7 +13,9 @@
 
 #include "rawfile.h"
 #include "variable.h"
+#ifdef NUMPARAMS
 #include "numparam/numpaif.h"
+#endif	/* NUMPARAMS */
 #include "ngspice/missing_math.h"
 #include "com_measure2.h"
 #include "com_let.h"
@@ -372,8 +374,10 @@ do_measure(
                     break;
                 }
             } else {
+#ifdef NUMPARAMS
                 if (!chk_only)
                     nupa_add_param(resname, result);
+#endif	/* NUMPARAMS */
             }
             wl_free(measure_word_list);
         } else {
@@ -473,7 +477,9 @@ do_measure(
         }
 
         if (!chk_only) {
+#ifdef NUMPARAMS
             ok = nupa_eval(meas_card);
+#endif /* NUMPARAMS */
 
             if (ok) {
                 str_ptr = strstr(meas_card->line, meastype);
@@ -489,7 +495,9 @@ do_measure(
                         if (measout)
                             fprintf(measout, "  %.*e\n", precision, result);
                     }
+#ifdef NUMPARAMS
                     nupa_add_param(resname, result);
+#endif /* NUMPARAMS */
                 }
             } else {
                 if (!chk_only) {

@@ -25,7 +25,9 @@ Author: 1985 Wayne A. Christopher, U. C. Berkeley CAD Group
 
 #include "ngspice/compatmode.h"
 #include "ngspice/dstring.h"
+#ifdef NUMPARAMS
 #include "numparam/general.h"
+#endif /* NUMPARAMS */
 
 static void killplot(struct plot *pl);
 static void DelPlotWindows(struct plot *pl);

@@ -14,7 +14,9 @@ Author: 1985 Wayne A. Christopher, U. C. Berkeley CAD Group
 #include "ngspice/fteparse.h"
 #include "ngspice/fteext.h"
 #include "ngspice/sim.h"
+#ifdef NUMPARAMS
 #include "numparam/general.h"
+#endif /* NUMPARAMS */
 
 #include "evaluate.h"
 #include "parse.h"
@@ -108,6 +110,7 @@ struct pnode* ft_getpnames_quotes(wordlist* wl, bool check)
         char* nsz = tmpstr = stripWhiteSpacesInsideParens(sz);
         DS_CREATE(ds1, 100); /* the new name string*/
         /* put double quotes around tokens which start with number chars or include a math char */
+#ifdef NUMPARAMS
         while (*tmpstr != '\0') {
             /*check if we have v(something) at the beginning, after arithchar, after space,
               or after dot. Skip V(" because it is already quoted. */
@@ -204,6 +207,7 @@ struct pnode* ft_getpnames_quotes(wordlist* wl, bool check)
             cadd(&ds1, *tmpstr);
             tmpstr++;
         }
+#endif /* NUMPARAMS */
 
         char* newline = ds_get_buf(&ds1);
         names = ft_getpnames_from_string(newline, check);

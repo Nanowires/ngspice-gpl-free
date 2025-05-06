@@ -24,7 +24,9 @@
 #include "../../frontend/inp.h"
 #include "../../frontend/subckt.h"
 #include "../../frontend/variable.h"
+#ifdef NUMPARAMS
 #include "../../frontend/numparam/numpaif.h"
+#endif	/* NUMPARAMS */     		
 #include "../../misc/util.h"
 
 /* Automatic insertion of bridge devices.
@@ -206,7 +208,9 @@ static struct card *expand_deck(struct card *head)
      * Prevent overwriting of debug output in inp_readall().
      */
 
+#ifdef NUMPARAMS
     dico = nupa_add_dicoslist();
+#endif /* NUMPARAMS */
     save_debug = ft_ngdebug;
     ft_ngdebug = FALSE;
 
@@ -237,9 +241,11 @@ static struct card *expand_deck(struct card *head)
      * expansion and restore the previous version.
      */
 
+#ifdef NUMPARAMS
     nupa_del_dicoS();
     nupa_set_dicoslist(dico);
     nupa_rem_dicoslist(dico);
+#endif /* NUMPARAMS */
     return card;
 }
 
@@ -499,11 +505,15 @@ static struct bridge *find_bridge(Evt_Node_Info_t  *event_node,
     while (dot) {
         if (!ok) {
             snprintf(dot + 1, sizeof buff - (size_t)(dot - buff), "%s", vcc_parm);
+#ifdef NUMPARAMS
             vcc = nupa_get_param(buff, &ok);
+#endif /* NUMPARAMS */     
         }
         if (!family) {
             snprintf(dot + 1, sizeof buff - (size_t)(dot - buff), "family");
+#ifdef NUMPARAMS
             family = nupa_get_string_param(buff);
+#endif /* NUMPARAMS */     
         }
         if (ok && family)
             break;
@@ -513,7 +523,9 @@ static struct bridge *find_bridge(Evt_Node_Info_t  *event_node,
 
     if (!ok) {
         if (vcc_parm)
+#ifdef NUMPARAMS
             vcc = nupa_get_param(vcc_parm, &ok);
+#endif /* NUMPARAMS */     
         if (!ok) {
             if (event_node->udn_index == 0)
                 vcc = 3.3; // Fallback default for digital.
@@ -523,7 +535,9 @@ static struct bridge *find_bridge(Evt_Node_Info_t  *event_node,
     }
 
     if (!family)
+#ifdef NUMPARAMS
         family = nupa_get_string_param("family");
+#endif /* NUMPARAMS */     
     if (family && cp_getvar("no_auto_bridge_family", CP_BOOL, NULL, 0))
         family = NULL;
 

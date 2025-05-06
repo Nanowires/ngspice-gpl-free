@@ -19,7 +19,9 @@ Author: 2023 Holger Vogt
 #include "ngspice/ftedefs.h"
 #include "ngspice/fteext.h"
 #include "ngspice/fteinp.h"
+#ifdef NUMPARAMS
 #include "numparam/general.h"
+#endif /* NUMPARAMS */
 
 #include <limits.h>
 #include <stdlib.h>

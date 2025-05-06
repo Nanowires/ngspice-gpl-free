@@ -27,7 +27,9 @@ Author: 1985 Wayne A. Christopher
 #include "ngspice/ftedefs.h"
 #include "ngspice/fteext.h"
 #include "ngspice/fteinp.h"
+#ifdef NUMPARAMS
 #include "numparam/general.h"
+#endif /* NUMPARAMS */
 
 #include "com_set.h"
 
@@ -713,15 +715,19 @@ static void inp_stitch_continuation_lines(struct card* working)
             }
 
             if (firsttime) {
+#ifdef NUMPARAMS
                 sadd(&newline, prev->line);
+#endif
                 firsttime = FALSE;
             }
             else {
+#ifdef NUMPARAMS
                 /* replace '+' by space */
                 *s = ' ';
                 sadd(&newline, s);
                 /* mark for later removal */
                 *s = '*';
+#endif
             }
 
             break;
@@ -6153,10 +6159,12 @@ static void inp_compat(struct card *card)
                         }
                         else if (!firstno && !secondno)
                             continue;
+#ifdef NUMPARAMS
                         sadd(&dxar, firstno);
                         cadd(&dxar, ' ');
                         sadd(&dyar, secondno);
                         cadd(&dyar, ' ');
+#endif /* NUMPARAMS */
                         tfree(firstno);
                         tfree(secondno);
                         ipairs++;
@@ -6374,10 +6382,12 @@ static void inp_compat(struct card *card)
                     }
                     else if (!firstno && !secondno)
                         continue;
+#ifdef NUMPARAMS
                     sadd(&dxar, firstno);
                     cadd(&dxar, ' ');
                     sadd(&dyar, secondno);
                     cadd(&dyar, ' ');
+#endif
                     tfree(firstno);
                     tfree(secondno);
                     ipairs++;

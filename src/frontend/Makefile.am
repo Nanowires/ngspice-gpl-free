@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = plotting help parser wdisp numparam trannoise
-DIST_SUBDIRS = plotting help parser wdisp numparam trannoise
+SUBDIRS = plotting help parser wdisp @NUMPARAMDIR@ trannoise
+DIST_SUBDIRS = plotting help parser wdisp @NUMPARAMDIR@ trannoise
 EXTRA_DIST = testcommands.c parse-bison-y.h
 
 BUILT_SOURCES = parse-bison.h
